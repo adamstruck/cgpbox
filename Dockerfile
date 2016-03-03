@@ -1,4 +1,4 @@
-FROM  ubuntu:12.04
+FROM  ubuntu:14.04
 
 MAINTAINER  keiranmraine@gmail.com
 
@@ -11,7 +11,6 @@ USER  root
 ENV OPT /opt/wtsi-cgp
 ENV PATH $OPT/bin:$PATH
 ENV PERL5LIB $OPT/lib/perl5
-
 
 RUN apt-get -yqq update && \
     apt-get -yqq install libreadline6-dev build-essential autoconf software-properties-common python-software-properties \
@@ -307,8 +306,11 @@ RUN curl -sSL https://s3.amazonaws.com/aws-cli/awscli-bundle.zip | bsdtar -xvf -
     rm -rf /tmp/downloads/awscli-bundle
 
 COPY scripts/runCgp.sh $OPT/bin/runCgp.sh
+COPY scripts/runCgp.py $OPT/bin/runCgp.py
 COPY scripts/getRef.sh $OPT/bin/getRef.sh
 RUN chmod ugo+x $OPT/bin/runCgp.sh $OPT/bin/getRef.sh
+
+RUN bash $OPT/bin/getRef.sh
 
 ## USER CONFIGURATION
 RUN     useradd -ms /bin/bash cgpbox
@@ -317,4 +319,4 @@ WORKDIR /home/cgpbox
 RUN     echo "options(bitmapType='cairo')" > ~/.Rprofile
 
 
-ENTRYPOINT $OPT/bin/runCgp.sh
+ENTRYPOINT $OPT/bin/runCgp.py

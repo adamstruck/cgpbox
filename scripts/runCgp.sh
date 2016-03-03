@@ -117,10 +117,8 @@ do_parallel[verify_WT]="verifyBamHomChk.pl -d 25 \
  -b $BAM_WT_TMP \
  -j /datastore/output/$NAME_WT/contamination/result.json"
 
-
-echo -e "\t[Parallel block 1] Get refset added..."
-do_parallel[get_refset]="getRef.sh "
-
+# echo -e "\t[Parallel block 1] Get refset added..."
+# do_parallel[get_refset]="getRef.sh "
 
 echo "Starting Parallel block 1: `date`"
 run_parallel $CPU do_parallel
@@ -254,6 +252,5 @@ for i in "${POST_EXEC[@]}"; do
   $i
   set +x
 done
-
 
 echo -e "\nWorkflow end: `date`"
