@@ -1,4 +1,4 @@
-FROM  ubuntu:14.04
+FROM  ubuntu:12.04
 
 MAINTAINER  keiranmraine@gmail.com
 
@@ -11,6 +11,7 @@ USER  root
 ENV OPT /opt/wtsi-cgp
 ENV PATH $OPT/bin:$PATH
 ENV PERL5LIB $OPT/lib/perl5
+
 
 RUN apt-get -yqq update && \
     apt-get -yqq install libreadline6-dev build-essential autoconf software-properties-common python-software-properties \
@@ -310,13 +311,13 @@ COPY scripts/runCgp.py $OPT/bin/runCgp.py
 COPY scripts/getRef.sh $OPT/bin/getRef.sh
 RUN chmod ugo+x $OPT/bin/runCgp.sh $OPT/bin/getRef.sh
 
-RUN bash $OPT/bin/getRef.sh
+# Get reference files
+RUN $OPT/bin/getRef.sh
 
 ## USER CONFIGURATION
 RUN adduser --disabled-password --gecos '' cgpbox && chsh -s /bin/bash && mkdir -p /home/cgpbox
 USER    cgpbox
 WORKDIR /home/cgpbox
 RUN     echo "options(bitmapType='cairo')" > /home/cgpbox/.Rprofile
-
 
 ENTRYPOINT $OPT/bin/runCgp.py
